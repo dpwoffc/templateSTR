@@ -107,7 +107,10 @@ async function startBot() {
     auth: state,
     browser: ["Windows", "Chrome", "123.0.0.0"],
     printQRInTerminal: false,
-    logger: pino({ level: "silent" })
+    logger: pino({ level: "silent" }),
+    syncFullHistory: false,
+    shouldSyncHistoryMessage: () => false,
+    getMessage: async () => undefined
   });
 
   botSocket = sock;
@@ -202,6 +205,17 @@ async function startBot() {
 
       const m = messages?.[0];
       if (!m?.message) return;
+      // skip history sync
+      if (m.key?.id?.startsWith("BAE5") && !m.key.fromMe) return;
+
+      // hanya proses pesan realtime
+      if (m.messageTimestamp) {
+          const now = Math.floor(Date.now() / 1000);
+
+          if (now - Number(m.messageTimestamp) > 10) {
+              return;
+          }
+      }
 
       // --- DEEP INTERCEPT CONVERT @LID TO PHONE JID ---
       let detectedPhoneJid = null;
