@@ -1,212 +1,342 @@
 const fs = require("fs");
 const path = require("path");
-const crypto = require("crypto");
+const pino = require("pino");
+const { Boom } = require("@hapi/boom");
+const handler = require("./case");
+
+const oldConsoleLog = console.log;
+const oldConsoleError = console.error;
+const oldConsoleWarn = console.warn;
+const oldConsoleInfo = console.info;
+
+const ignoredLogs = [
+    "Closing session",
+    "Closing open session",
+    "Decrypted message with closed session",
+    "Failed to decrypt message with any known session",
+    "Session error",
+    "Bad MAC",
+    "Failed to decrypt message"
+];
+
+function shouldIgnore(args) {
+    try {
+        const text = args
+            .map(v => {
+                if (typeof v === "object") {
+                    return JSON.stringify(v);
+                }
+                return String(v);
+            })
+            .join(" ");
+
+        return ignoredLogs.some(x => text.includes(x));
+
+    } catch {
+        return false;
+    }
+}
+
+
+console.log = (...args) => {
+    if (!shouldIgnore(args)) {
+        oldConsoleLog(...args);
+    }
+};
+
+console.error = (...args) => {
+    if (!shouldIgnore(args)) {
+        oldConsoleError(...args);
+    }
+};
+
+console.warn = (...args) => {
+    if (!shouldIgnore(args)) {
+        oldConsoleWarn(...args);
+    }
+};
+
+console.info = (...args) => {
+    if (!shouldIgnore(args)) {
+        oldConsoleInfo(...args);
+    }
+};
 
 const {
-    ownerNumber,
-    botNumber
-} = require("./database/credential");
+  default: makeWASocket,
+  DisconnectReason,
+  useMultiFileAuthState,
+  fetchLatestBaileysVersion
+} = require("@whiskeysockets/baileys");
 
-const SESSION = path.join(__dirname, "database/session.json");
-const ORDER = path.join(__dirname, "database/orderan.json");
-const PRODUCT = path.join(__dirname, "database/product.json");
+let botSocket = null;
+let starting = false;
 
-function delay(ms){
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+async function startBot() {
 
-function read(file){
-    if(!fs.existsSync(file)) return [];
-    return JSON.parse(fs.readFileSync(file));
-}
+  if (botSocket) {
+    console.log("⚠️ Bot already running");
+    return botSocket;
+  }
 
-function write(file, data){
-    fs.writeFileSync(file, JSON.stringify(data, null, 4));
-}
+  if(starting){
+    console.log("⏳ Bot starting...");
+    return;
+  }
 
-module.exports = async (sock, m) => {
+  starting = true;
+
+  let reconnecting = false;
+  let hasConnected = false;
+  let pairingRequested = false;
+
+  const credential = require("./database/credential");
+
+  let phoneNumber = credential.botNumber;
+
+  const SESSION_PATH = path.join(
+    __dirname,
+    "session"
+  );
+
+  const { state, saveCreds } = await useMultiFileAuthState(SESSION_PATH);
+  const { version } = await fetchLatestBaileysVersion();
+
+  const sock = makeWASocket({
+    version,
+    auth: state,
+    browser: ["Windows", "Chrome", "123.0.0.0"],
+    printQRInTerminal: false,
+    logger: pino({ level: "silent" }),
+    syncFullHistory: false,
+    shouldSyncHistoryMessage: () => false,
+    getMessage: async () => undefined
+  });
+
+  botSocket = sock;
+  starting = false;
+
+  sock.ev.on("creds.update", saveCreds);
+
+  sock.ev.on("connection.update", async (update) => {
+    const { connection, lastDisconnect } = update;
     try {
-        // --- TAMBAHKAN INI UNTUK DEBUGGING ---
-        const cekPesan = m.message?.conversation || m.message?.extendedTextMessage?.text || m.body || "kosong";
-        const cekSender = (m.key.participant || m.key.remoteJid).split("@")[0];
+      if (connection === "connecting" && !state.creds.registered && !pairingRequested) {
+        pairingRequested = true;
 
-        const messageContent = m.message?.conversation || m.message?.extendedTextMessage?.text || m.body || "";
-        const body = messageContent.trim();
-        // ... lanjutan kode ...
+        setTimeout(async () => {
+          try {
+            const custom = "STRSITES";
+            const code = await sock.requestPairingCode(phoneNumber, custom);
 
-        // 2. UPDATE: Abaikan pesan jika tidak memiliki awalan titik (.) atau kosong
-        if (!body || !body.startsWith(".")) return;
+            console.log(
+              "🔗 Pairing Code:",
+              code?.match(/.{1,4}/g)?.join("-") || code
+            );
+            console.log("📱 Masukkan kode di WhatsApp > Perangkat tertaut");
+          } catch (err) {
+            console.error("❌ Pairing failed:", err.message);
+            process.exit(1);
+          }
+        }, 3000);
+      }
 
-        const args = body.split(/\s+/);
+      if (connection === "open") {
+          reconnecting = false;
+          pairingRequested = false;
 
-        const command = args[0]
-            .replace(".", "")
-            .toLowerCase();
+          if (state.creds.registered) {
+              hasConnected = true;
+              console.log(`✅ Bot connected successfully [${credential.botName}]`);
+          } else {
+              console.log("⌛ Menunggu konfirmasi pairing dari HP...");
+          }
+      }
 
-        const sender = (
-            m.key.participant ||
-            m.key.remoteJid
-        ).split("@")[0];
+      if (connection === "close") {
+          const reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
 
-        // 3. Filter Hak Akses: Selain owner hanya boleh .verif
-        if (
-            sender !== ownerNumber &&
-            command !== "verif"
-        ) {
-            return;
-        }
+          console.log("Connection closed:", reason);
 
-        switch (command) {
-            case "start": {
-                const thumbnail = fs.readFileSync(
-                    path.join(__dirname, "./database/assets/favicon.jpg")
-                );
-  
-                await sock.sendMessage(m.key.remoteJid, {
-                    text:`
-╭━━━〔 🤖 LUFFY BOTZ 〕━━━╮ 
-┃ 
-┃ 📡 Status : Online 
-┃ ⚡ Engine : Baileys 
-┃ 🌐 Mode : Website Asisten 
-┃ 
-╰━━━━━━━━━━━━━━━━━━╯ 
-> System made by @itcsneka 🚀`, 
-                    contextInfo: {
-                        quotedMessage: {
-                            conversation: "⚓ Luffy Botz System"
-                        },
-                        participant: "0@s.whatsapp.net",
-                        isForwarded: true,
-                        forwardingScore: 999,
-                        externalAdReply: {
-                            title: "🤖 Luffy Botz",
-                            body: "WhatsApp Automation System",
-                            mediaType: 1,
-                            thumbnail: thumbnail,
-                            sourceUrl: "https://wa.me/6285786335575",
-                            renderLargerThumbnail: true,
-                            showAdAttribution: true
-                        }
-                    }
-                });
-                break;
-            }
+          botSocket = null;
 
-case "verif": {
-                const token = args[1];
+          if (reason === DisconnectReason.loggedOut || reason === 401) {
+              console.log(`[SESSION INVALID]`);
 
-                if (!token) {
-                    return await sock.sendMessage(m.key.remoteJid, { text: "❌ Format salah! Gunakan: *.verif <token>*" });
-                }
+              if (fs.existsSync(SESSION_PATH)) {
+                  fs.rmSync(SESSION_PATH, {
+                      recursive: true,
+                      force: true
+                  });
+              }
 
-                const sessions = read(SESSION);
+              return;
+          }
 
-                let sessionOwner = null;
-                let order = null;
-                let sessionKey = null;
 
-                // UPDATE: Cara baca DB disesuaikan dengan struktur baru
-                for (const account of sessions) {
-                    for (const key in account) {
-                        const orderArray = account[key];
-                        // Pastikan isinya adalah Array dan ada isinya
-                        if (Array.isArray(orderArray) && orderArray.length > 0) {
-                            // Cek apakah hyperToken di dalam array cocok dengan input
-                            if (orderArray[0].hyperToken === token) {
-                                sessionOwner = account;
-                                sessionKey = key; // Simpan key (bc940b23...) untuk dihapus nanti
-                                order = orderArray[0];
-                                break;
-                            }
-                        }
-                    }
-                    if (order) break; // Jika ketemu, hentikan pencarian
-                }
+          // khusus pairing restart
+          if (reason === 515) {
+              console.log("🔄 Restart socket after pairing...");
 
-                if (!order) {
-                    return await sock.sendMessage(m.key.remoteJid, { text: "❌ Token verifikasi tidak ditemukan atau sudah digunakan!" });
-                }
+              setTimeout(() => {
+                  startBot();
+              }, 2000);
 
-                if (order.hyperTokenExpiredAt && new Date(order.hyperTokenExpiredAt) <= new Date()) {
-                    return await sock.sendMessage(m.key.remoteJid, { text: "❌ Token verifikasi sudah kadaluarsa!" });
-                }
+              return;
+          }
 
-                const products = read(PRODUCT);
-                const product = products.find(p => String(p.id) === String(order.productID));
 
-                if (!product) {
-                    return await sock.sendMessage(m.key.remoteJid, { text: `❌ Produk dengan ID (${order.productID}) tidak ditemukan di database!` });
-                }
+          if (!reconnecting) {
+              reconnecting = true;
 
-                const orders = read(ORDER);
-
-                orders.push({
-                    orderId: "DPW-" + token.substring(0, 8).toUpperCase(),
-                    productId: order.productID,
-                    price: product.price,
-                    custName: order.custName,
-                    orderType: order.orderType,
-                    status: "proses",
-                    orderDate: new Date().toISOString()
-                });
-
-                write(ORDER, orders);
-                
-                // Hapus data order dari object
-                delete sessionOwner[sessionKey];
-
-                // Bersihkan object yang sudah kosong {} dari dalam array
-                const cleanedSessions = sessions.filter(account => Object.keys(account).length > 0);
-
-                // Simpan array yang sudah bersih
-                write(SESSION, cleanedSessions);
-
-                await sock.sendMessage(m.key.remoteJid, {
-                    text:
-`✅ *ORDER TERVERIFIKASI*
-
-ID : DPW-${token.substring(0, 8).toUpperCase()}
-Produk : ${product.name}
-Atas Nama : ${order.custName}
-
-Silahkan lanjutkan ke pembayaran.`
-                });
-
-                await delay(2000);
-
-                const qrisPath = path.join(__dirname, "database/assets/qris.jpg");
-                
-                if (fs.existsSync(qrisPath)) {
-                    await sock.sendMessage(m.key.remoteJid, {
-                        image: fs.readFileSync(qrisPath),
-                        caption:
-`╭───〔 💸 PAYMENT INFO 〕───╮
-📦 Metode Pembayaran:
-
-📲 DANA / GOPAY
-👤 Nama: dpwoffc/DPW
-📞 Nomor: 085786335575
-
-📲 Shopee Pay
-👤 Nama: Dwi Putra Wibowo 
-📞 Nomor: 901228687803
-
-📦 Keterangan: Transfer langsung atau via QR
-
-╰───〔 🧾 Terima kasih! 〕───╯
-💬 Jika sudah transfer, segera konfirmasi ke admin 💼
-🎁 Transaksi aman, cepat, dan terpercaya!`
-                    });
-                } else {
-                    await sock.sendMessage(m.key.remoteJid, { text: "⚠️ Berhasil diverifikasi, namun gambar QRIS tidak ditemukan di server." });
-                }
-                
-                break;
-            
-            }
-        }
+              setTimeout(() => {
+                  startBot();
+              }, 3000);
+          }
+      }
     } catch (err) {
-        console.error("Terjadi kesalahan pada sistem:", err);
+      console.error("EVENT ERROR:", err);
     }
+  });
+
+  sock.ev.on("messages.upsert", async ({ messages, type }) => {
+    try {
+      if (type !== "notify") return;
+
+      const m = messages?.[0];
+      if (!m?.message) return;
+      // skip history sync
+      if (m.key?.id?.startsWith("BAE5") && !m.key.fromMe) return;
+
+      // hanya proses pesan realtime
+      if (m.messageTimestamp) {
+          const now = Math.floor(Date.now() / 1000);
+
+          if (now - Number(m.messageTimestamp) > 10) {
+              return;
+          }
+      }
+
+      // --- DEEP INTERCEPT CONVERT @LID TO PHONE JID ---
+      let detectedPhoneJid = null;
+
+      if (m.key?.remoteJidAlt?.endsWith("@s.whatsapp.net")) detectedPhoneJid = m.key.remoteJidAlt;
+      if (!detectedPhoneJid && m.key?.participantAlt?.endsWith("@s.whatsapp.net")) detectedPhoneJid = m.key.participantAlt;
+      if (!detectedPhoneJid && m.key?.senderPn) detectedPhoneJid = `${m.key.senderPn}@s.whatsapp.net`;
+      if (!detectedPhoneJid && m.senderPn) detectedPhoneJid = `${m.senderPn}@s.whatsapp.net`;
+
+      if (!detectedPhoneJid) {
+        const rawString = JSON.stringify(m);
+        const match = rawString.match(/(\d+)@s\.whatsapp\.net/);
+        if (match) detectedPhoneJid = match[0];
+      }
+
+      if (detectedPhoneJid) {
+        if (m.key?.remoteJid?.endsWith("@lid")) m.key.remoteJid = detectedPhoneJid;
+        if (m.key?.participant?.endsWith("@lid")) m.key.participant = detectedPhoneJid;
+        if (m.sender?.endsWith("@lid")) m.sender = detectedPhoneJid;
+        if (m.chat?.endsWith("@lid")) m.chat = detectedPhoneJid;
+        if (m.from?.endsWith("@lid")) m.from = detectedPhoneJid;
+      }
+      // --- PROSES SELESAI ---
+
+      const jid = m.key?.remoteJid || "";
+      const isNewsletter = jid.endsWith("@newsletter");
+
+      if (jid === "status@broadcast") return;
+
+      const msg =
+        m.message?.conversation ||
+        m.message?.extendedTextMessage?.text ||
+        m.message?.imageMessage?.caption ||
+        m.message?.videoMessage?.caption ||
+        "";
+
+      m.body = msg;
+      m.isNewsletter = isNewsletter;
+
+      const sourceType = isNewsletter ? "Newsletter" : jid.endsWith("@g.us") ? "Group" : "Private";
+      const detailId = jid ? ` (${jid})` : "";
+      const pushName = m.pushName || "No Name";
+      const sender = m.key?.remoteJid || "";
+      const lid = (m.key?.remoteJid?.endsWith("@lid") || m.key?.participant?.endsWith("@lid"))
+        ? m.key?.remoteJid?.split("@")[0] || "None"
+        : "None";
+
+      const rawCommand = msg.split(" ")[0] || "";
+      const command = rawCommand.replace(/^\.*/, "");
+      await handler(sock, m);
+
+    } catch (err) {
+      console.error("HANDLER ERROR:", err);
+    }
+  });
+
+  return sock;
+}
+
+// Function to cleanly stop a running bot
+async function stopBot(){
+
+  if(!botSocket) return;
+
+  try {
+    botSocket.end({
+      reason:"manual"
+    });
+  } catch(e){}
+
+  botSocket = null;
+
+  console.log("🛑 Bot stopped");
+}
+
+// Function to restart/repair the bot
+async function repairBot(){
+
+  console.log("🔧 Repairing bot...");
+
+  await stopBot();
+
+  setTimeout(()=>{
+    startBot();
+  },2000);
+
+}
+
+// Function to delete the session entirely
+async function deleteSession(){
+
+  await stopBot();
+
+  const SESSION_PATH = path.join(
+    __dirname,
+    "session"
+  );
+
+  if(fs.existsSync(SESSION_PATH)){
+
+    fs.rmSync(
+      SESSION_PATH,
+      {
+        recursive:true,
+        force:true
+      }
+    );
+
+    console.log("🗑️ Session deleted");
+
+  }
+}
+
+function getBotStatus(){
+    return botSocket !== null;
+}
+
+module.exports = {
+    startBot,
+    stopBot,
+    repairBot,
+    deleteSession,
+    getBotStatus
 };
