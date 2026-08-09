@@ -1,9 +1,9 @@
 [
     {
-        "email": "dwi@dpwoffc.my.id",
-        "password": "esemkah",
-        "username": "dpwoffc",
+        "email": "admin@itcsneka.my.id",
+        "password": "admin",
+        "username": "admin",
         "role": "admin",
-        "token": "bc940b23e3c964beb97913b2f8a9f69e57186f97673dfcff9175e09330e0825e77cf6fc576e2bf5e817c066e7bb4e5b1"
+        "token": ""
     }
 ]
