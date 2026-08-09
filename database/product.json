@@ -1,13 +1,1 @@
-[
-    {
-        "id": "e5b30d4f476d774b",
-        "name": "edit data",
-        "price": 1,
-        "description": "tes add product",
-        "image": "./product/edit-data.jpg",
-        "adminWhatsapp": "6285786335575",
-        "orderMethods": [
-            "WhatsApp"
-        ]
-    }
-]
+[]
