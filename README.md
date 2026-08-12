@@ -251,7 +251,33 @@ npm -v
 
 ## 📥 Installation
 
-Clone repository:
+### 📱 Termux — Fresh Setup
+
+Jika menggunakan **Termux** dan belum pernah melakukan setup sebelumnya, jalankan perintah berikut dari awal.
+
+#### 1. Update package Termux
+
+```bash
+pkg update -y && pkg upgrade -y
+```
+
+#### 2. Install dependencies dasar
+
+```bash
+pkg install -y git nodejs-lts
+```
+
+Cek instalasi:
+
+```bash
+node -v
+npm -v
+git --version
+```
+
+Jika ketiganya menampilkan versi, berarti environment sudah siap.
+
+#### 3. Clone repository
 
 ```bash
 git clone https://github.com/dpwoffc/templateSTR.git
@@ -263,10 +289,148 @@ Masuk ke directory:
 cd templateSTR
 ```
 
-Install dependency:
+#### 4. Install Node.js dependencies
 
 ```bash
 npm install
+```
+
+#### 5. Configure credential
+
+Buka file:
+
+```bash
+nano database/credential.js
+```
+
+Sesuaikan konfigurasi seperti nomor WhatsApp bot, owner, dan credential payment jika digunakan.
+
+#### 6. Jalankan server
+
+```bash
+npm start
+```
+
+---
+
+### 🔄 Jika Sebelumnya Pernah Clone Repository
+
+Jika repository `templateSTR` sebelumnya sudah pernah di-clone, **disarankan menghapus directory lama terlebih dahulu** agar tidak terjadi konflik atau menggunakan source code versi lama.
+
+Keluar dari directory repository jika sedang berada di dalamnya:
+
+```bash
+cd ..
+```
+
+Hapus repository lama:
+
+```bash
+rm -rf templateSTR
+```
+
+Clone ulang repository:
+
+```bash
+git clone https://github.com/dpwoffc/templateSTR.git
+```
+
+Masuk ke repository:
+
+```bash
+cd templateSTR
+```
+
+Install ulang dependencies:
+
+```bash
+npm install
+```
+
+Kemudian jalankan:
+
+```bash
+npm start
+```
+
+> **⚠️ Important:** Pastikan kamu tidak memiliki perubahan penting di directory repository lama sebelum menjalankan `rm -rf templateSTR`, karena seluruh file di directory tersebut akan dihapus.
+
+---
+
+### 🖥️ Linux / Ubuntu / Debian
+
+Install Git dan Node.js terlebih dahulu:
+
+```bash
+sudo apt update
+sudo apt install -y git nodejs npm
+```
+
+Cek versi:
+
+```bash
+node -v
+npm -v
+git --version
+```
+
+Clone repository:
+
+```bash
+git clone https://github.com/dpwoffc/templateSTR.git
+cd templateSTR
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Jalankan:
+
+```bash
+npm start
+```
+
+---
+
+### 🪟 Windows
+
+Pastikan sudah terinstall:
+
+* Git
+* Node.js LTS
+* npm
+
+Kemudian buka **PowerShell** atau **Command Prompt**:
+
+```powershell
+git clone https://github.com/dpwoffc/templateSTR.git
+cd templateSTR
+npm install
+npm start
+```
+
+---
+
+## 🔄 Updating an Existing Installation
+
+Jika ingin mengambil versi terbaru dari repository dan tidak memiliki perubahan lokal yang perlu dipertahankan, cara paling bersih adalah menghapus repository lama lalu clone ulang:
+
+```bash
+cd ..
+rm -rf templateSTR
+git clone https://github.com/dpwoffc/templateSTR.git
+cd templateSTR
+npm install
+npm start
+```
+
+Untuk Termux/Linux, perintah di atas dapat langsung digunakan.
+
+> **⚠️ Backup terlebih dahulu** file konfigurasi, database JSON, credential, dan folder `session/` jika masih ingin mempertahankannya sebelum menghapus directory lama.
+
 ```
 
 ---
