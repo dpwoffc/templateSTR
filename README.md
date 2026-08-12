@@ -320,7 +320,7 @@ Jika repository `templateSTR` sebelumnya sudah pernah di-clone, **disarankan men
 Keluar dari directory repository jika sedang berada di dalamnya:
 
 ```bash
-cd ..
+cd ~
 ```
 
 Hapus repository lama:
