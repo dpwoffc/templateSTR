@@ -247,8 +247,6 @@ Cek npm:
 npm -v
 ```
 
----
-
 ## 📥 Installation
 
 ### 📱 Termux — Fresh Setup
@@ -320,7 +318,7 @@ Jika repository `templateSTR` sebelumnya sudah pernah di-clone, **disarankan men
 Keluar dari directory repository jika sedang berada di dalamnya:
 
 ```bash
-cd ~
+cd ..
 ```
 
 Hapus repository lama:
@@ -431,7 +429,6 @@ Untuk Termux/Linux, perintah di atas dapat langsung digunakan.
 
 > **⚠️ Backup terlebih dahulu** file konfigurasi, database JSON, credential, dan folder `session/` jika masih ingin mempertahankannya sebelum menghapus directory lama.
 
-```
 
 ---
 
