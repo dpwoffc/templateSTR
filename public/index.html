@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dpwoffc store</title>
+    <link rel="icon" type="image/jpeg" href="/assets/favicon.jpg">
+    <style>
+      .product-description {
+          font-size: 12px;
+          line-height: 1.45;
+          color: #777;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          min-height: 34px;
+          margin-bottom: 8px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f5f5f5;
+        color: #222;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: #fff;
+        border-bottom: 1px solid #eee;
+      }
+
+      .header-inner {
+        max-width: 1200px;
+        height: 68px;
+        margin: auto;
+        padding: 0 20px;
+
+        display: flex;
+        align-items: center;
+      }
+
+      .store {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .store-logo {
+        width: 38px;
+        height: 38px;
+        border-radius: 9px;
+        object-fit: cover;
+      }
+
+      .store-name {
+        font-size: 21px;
+        font-weight: 800;
+        color: #00a957;
+      }
+
+      main {
+        max-width: 1200px;
+        margin: auto;
+        padding: 24px 20px 40px;
+        min-height: 500px;
+      }
+
+      .section-header {
+        margin-bottom: 16px;
+      }
+
+      .section-title {
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .products {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 14px;
+      }
+
+      .product {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: .2s;
+      }
+
+      .product:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 20px rgba(0, 0, 0, .08);
+      }
+
+      .product-image {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        background: #f0f0f0;
+        overflow: hidden;
+      }
+
+      .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .product-content {
+        padding: 12px;
+      }
+
+      .product-name {
+        font-size: 14px;
+        line-height: 1.4;
+        min-height: 40px;
+        margin-bottom: 8px;
+      }
+
+      .price {
+        font-size: 17px;
+        font-weight: 800;
+        margin-bottom: 9px;
+      }
+
+      .services {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+
+      .service {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 7px;
+        border-radius: 5px;
+        font-size: 10px;
+        font-weight: 700;
+      }
+
+      .service.whatsapp {
+        background: #dcfce7;
+        color: #16a34a;
+      }
+
+      .service.qris {
+        background: #fef3c7;
+        color: #d97706;
+      }
+
+      .service.telegram {
+        background: #dbeafe;
+        color: #2563eb;
+      }
+
+      footer {
+        background: #fff;
+        border-top: 1px solid #e5e5e5;
+      }
+
+      .footer-inner {
+        max-width: 1200px;
+        margin: auto;
+        padding: 40px 20px;
+
+        display: grid;   
+        grid-template-columns: 1.5fr 1fr 1fr 1fr;
+        gap: 40px;
+      }
+
+      .footer-brand {
+        font-size: 20px;
+        font-weight: 800;
+        color: #00a957;
+        margin-bottom: 10px;
+      }
+
+      .footer-description {
+        max-width: 300px;
+        color: #777;
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      .footer-title {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 14px;
+      }
+
+      .footer-link {
+        display: block;
+        color: #777;
+        font-size: 13px;
+        margin-bottom: 10px;
+        transition: .2s;
+      }
+
+      .footer-link:hover {
+        color: #00a957;
+      }
+
+      .socials {
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+      }
+
+      .social {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+
+        color: #666;
+        font-size: 13px;
+
+        transition: .2s;
+      }
+
+      .social:hover {
+        color: #00a957;
+      }
+
+      .social-icon {
+        width: 28px;
+        height: 28px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 7px;
+        background: #f3f3f3;
+        font-size: 14px;
+      }
+
+      .copyright {
+        border-top: 1px solid #eee;
+        padding: 17px 20px;
+
+        text-align: center;
+        color: #888;
+        font-size: 12px;
+      }
+
+      @media (max-width: 1000px) {
+        .products {
+          grid-template-columns: repeat(4, 1fr);
+        }
+
+        .footer-inner {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 750px) {
+        .products {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      @media (max-width: 520px) {
+        .header-inner {
+          height: 60px;
+          padding: 0 12px;
+        }
+
+        .store-name {
+          font-size: 18px;
+        }
+
+        main {
+          padding: 18px 10px 30px;
+        }
+
+        .products {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 9px;
+        }
+
+        .product-content {
+          padding: 9px;
+        }
+
+        .product-name {
+          font-size: 13px;
+        }
+
+        .price {
+          font-size: 15px;
+        }
+
+        .footer-inner {
+          grid-template-columns: 1fr;
+          gap: 25px;
+          padding: 30px 15px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="header-inner">
+        <div class="store">
+          <img
+            class="store-logo"
+            src="/assets/favicon.jpg"
+            alt="dpwoffc store"
+          >
+
+          <div class="store-name">
+            dpwoffc store
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="products">
+        <div class="product">
+          <div class="product-image">
+            <img
+              src="/assets/whatsapp.jpg"
+              alt="WhatsApp"
+            >
+          </div>
+
+          <div class="product-content">
+
+            <div class="product-name">
+              WhatsApp Premium
+            </div>
+
+            <div class="price">
+              Rp25.000
+            </div>
+
+            <div class="services">
+
+              <span class="service whatsapp">
+                WhatsApp
+              </span>
+
+              <span class="service qris">
+                QRIS
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="product">
+          <div class="product-image">
+            <img
+              src="/assets/qris.jpg"
+              alt="QRIS"
+            >
+          </div>
+
+          <div class="product-content">
+            <div class="product-name">
+              QRIS Payment
+            </div>
+
+            <div class="price">
+              Rp10.000
+            </div>
+
+            <div class="services">
+              <span class="service qris">
+                QRIS
+              </span>
+
+              <span class="service whatsapp">
+                WhatsApp
+              </span>
+
+              <span class="service telegram">
+                Telegram
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="product">
+          <div class="product-image">
+            <img
+              src="/assets/telegram.jpg"
+              alt="Telegram"
+            >
+          </div>
+
+          <div class="product-content">
+            <div class="product-name">
+              Telegram Premium
+            </div>
+
+            <div class="price">
+              Rp30.000
+            </div>
+
+            <div class="services">
+
+              <span class="service telegram">
+                Telegram
+              </span>
+
+              <span class="service qris">
+                QRIS
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="product">
+          <div class="product-image">
+            <img
+              src="/assets/product.jpg"
+              alt="Produk Digital"
+            >
+          </div>
+
+          <div class="product-content">
+            <div class="product-name">
+              Produk Digital
+            </div>
+
+            <div class="price">
+              Rp15.000
+            </div>
+
+            <div class="services">
+              <span class="service whatsapp">
+                WhatsApp
+              </span>
+
+              <span class="service telegram">
+                Telegram
+              </span>
+
+              <span class="service qris">
+                QRIS
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">
+            dpwoffc store
+          </div>
+
+          <div class="footer-description">
+            dpwoffc store menyediakan berbagai
+            produk dan layanan digital dengan
+            proses cepat, aman, dan mudah.
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">
+            Ikuti Kami
+          </div>
+
+          <div class="socials">
+            <a href="https://tiktok.com/dpwoffc" class="social">
+              <span class="social-icon">
+                ♪
+              </span>
+              TikTok
+            </a>
+
+            <a href="https://instagram.com/dpwoffc" class="social">
+              <span class="social-icon">
+                ◎
+              </span>
+              Instagram
+            </a>
+
+            <a href="https://whatsapp.com/channel/0029VbDXVLsKAwEuADHPn51T" class="social">
+              <span class="social-icon">
+                ☎
+              </span>
+              WhatsApp
+            </a>
+
+            <a href="https://t.me/dpwoffc" class="social">
+              <span class="social-icon">
+                ➤
+              </span>
+              Telegram
+            </a>
+
+            <a href="mailto:admin@dpwoffc.my.id" class="social">
+              <span class="social-icon">
+                ✉
+              </span>
+              Email
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="copyright">
+        © 2026 dpwoffc store. All rights reserved.
+      </div>
+    </footer>
+    <script src="./script.js"></script>
+  </body>
+</html>

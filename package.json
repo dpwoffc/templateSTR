@@ -1,0 +1,19 @@
+{
+  "name": "simplestr",
+  "version": "1.0.0",
+  "description": "Simple STR For Example Template",
+  "start": "index.js",
+  "scripts": {
+    "start": "npx nodemon --verbose index.js"
+  },
+  "author": "@dpwoffc",
+  "license": "ISC",
+  "dependencies": {
+    "@whiskeysockets/baileys": "^7.0.0-rc14",
+    "axios": "^1.19.0",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.2.1",
+    "multer": "^2.2.0",
+    "nodemon": "^3.1.14"
+  }
+}

@@ -1,0 +1,9 @@
+[
+    {
+        "email": "admin@admin.com",
+        "password": "admin",
+        "username": "admin",
+        "role": "admin",
+        "token": "545d1f7ca2c851f3df8c4861d1aaf8dc063b8917565d7604587c31d1ab577a61553183eec2dbae7655588e0f96650bd1"
+    }
+]

@@ -1,0 +1,22 @@
+{
+  "watch": [
+    "*.js",
+    "**/*.js"
+  ],
+  "ignore": [
+    "**/node_modules/**",
+    "**/session/**",
+    "**/database/**",
+    "**/logs/**",
+    "**/public/**",
+    "**/views/**",
+    "**/*.json",
+    "package-lock.json",
+    "package.json",
+    "payment.js",
+    "database/credential.js",
+    "database/product.json",
+    "route.js"
+  ],
+  "ext": "js"
+}

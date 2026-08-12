@@ -1,0 +1,36 @@
+[
+    {
+        "id": "2d0fa2aa7dca6680",
+        "name": "example",
+        "price": 10000,
+        "description": "example product.\r\nfull image view on endpoint /image/example.jpg",
+        "image": "./product/example.png",
+        "adminWhatsapp": "628888888888",
+        "orderMethods": [
+            "whatsapp"
+        ]
+    },
+    {
+        "id": "25c9c0184d71561a",
+        "name": "example 2",
+        "price": 10000,
+        "description": "example product.\r\nfull image view on endpoint /image/example-2.jpg",
+        "image": "./product/example-2.png",
+        "adminWhatsapp": "62888888888888",
+        "orderMethods": [
+            "qris"
+        ]
+    },
+    {
+        "id": "0af0be2c7405e1a6",
+        "name": "example 3",
+        "price": 10000,
+        "description": "example product.\r\nfull image view on endpoint /image/example-3.jpg",
+        "image": "./product/example-3.png",
+        "adminWhatsapp": "62888888888888",
+        "orderMethods": [
+            "whatsapp",
+            "qris"
+        ]
+    }
+]

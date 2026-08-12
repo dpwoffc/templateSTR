@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Order - dpwoffc store</title>
+
+  <link
+    rel="icon"
+    type="image/jpeg"
+    href="/assets/favicon.jpg"
+  >
+
+  <style>
+
+    /* =========================================================
+    PROCESS POPUP
+    ========================================================= */
+
+    #processPopup {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    }
+
+
+    /* =========================================================
+    OVERLAY
+    ========================================================= */
+
+    #processPopup .process-popup-overlay {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    }
+
+
+    /* =========================================================
+    POPUP CARD
+    ========================================================= */
+
+    #processPopup .process-popup-card {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+    max-width: 430px;
+
+    background: #ffffff;
+
+    border-radius: 16px;
+
+    padding: 24px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.25);
+
+    animation:
+        processPopupShow
+        0.2s ease-out;
+    }
+
+
+    /* =========================================================
+    TITLE
+    ========================================================= */
+
+    #processPopup .process-popup-title {
+    font-size: 22px;
+
+    font-weight: 700;
+
+    color: #111827;
+
+    margin-bottom: 10px;
+    }
+
+
+    /* =========================================================
+    DESCRIPTION
+    ========================================================= */
+
+    #processPopup .process-popup-description {
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    color: #6b7280;
+
+    margin-bottom: 18px;
+    }
+
+
+    /* =========================================================
+    TOKEN
+    ========================================================= */
+
+    #processPopup .process-popup-token {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 12px;
+
+    margin-bottom: 18px;
+
+    border-radius: 10px;
+
+    background: #f3f4f6;
+
+    color: #111827;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 13px;
+
+    word-break: break-all;
+
+    text-align: center;
+    }
+
+
+    /* =========================================================
+    PROCESS BUTTON
+    ========================================================= */
+
+    #processPopup .process-order-button {
+    width: 100%;
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 13px 16px;
+
+    background: #16a34a;
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+    }
+
+
+    #processPopup .process-order-button:hover {
+    background: #15803d;
+    }
+
+
+    #processPopup .process-order-button:active {
+    transform: scale(0.98);
+    }
+
+
+    #processPopup .process-order-button:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+    }
+
+
+    /* =========================================================
+    CLOSE BUTTON
+    ========================================================= */
+
+    #processPopup .close-process-button {
+    width: 100%;
+
+    border: none;
+
+    background: transparent;
+
+    color: #6b7280;
+
+    padding: 11px 16px;
+
+    margin-top: 6px;
+
+    font-size: 14px;
+
+    cursor: pointer;
+    }
+
+
+    #processPopup .close-process-button:hover {
+    color: #111827;
+    }
+
+
+    /* =========================================================
+    ANIMATION
+    ========================================================= */
+
+    @keyframes processPopupShow {
+
+    from {
+        opacity: 0;
+
+        transform:
+        translateY(10px)
+        scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+        translateY(0)
+        scale(1);
+    }
+
+    }
+
+
+    /* =========================================================
+    MOBILE
+    ========================================================= */
+
+    @media (max-width: 480px) {
+
+    #processPopup {
+        padding: 16px;
+    }
+
+    #processPopup .process-popup-card {
+        max-width: none;
+
+        border-radius: 14px;
+
+        padding: 20px;
+    }
+
+    #processPopup .process-popup-title {
+        font-size: 20px;
+    }
+
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+
+      background: #fff;
+      border-bottom: 1px solid #eee;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      height: 68px;
+
+      margin: auto;
+      padding: 0 20px;
+
+      display: flex;
+      align-items: center;
+    }
+
+    .store {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .store-logo {
+      width: 38px;
+      height: 38px;
+
+      border-radius: 9px;
+      object-fit: cover;
+    }
+
+    .store-name {
+      font-size: 21px;
+      font-weight: 800;
+      color: #00a957;
+    }
+
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    main {
+      max-width: 900px;
+
+      margin: auto;
+
+      padding: 30px 20px 50px;
+    }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+
+      margin-bottom: 18px;
+
+      color: #00a957;
+
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .back:hover {
+      text-decoration: underline;
+    }
+
+
+    /* =========================
+       ORDER CARD
+    ========================= */
+
+    .order-card {
+      background: #fff;
+
+      border: 1px solid #eee;
+      border-radius: 12px;
+
+      overflow: hidden;
+    }
+
+
+    /* =========================
+       PRODUCT SUMMARY
+    ========================= */
+
+    .product-summary {
+      padding: 20px;
+
+      display: flex;
+      gap: 16px;
+
+      border-bottom: 1px solid #eee;
+    }
+
+    .product-image {
+      width: 110px;
+      height: 110px;
+
+      flex-shrink: 0;
+
+      background: #f3f3f3;
+      border-radius: 9px;
+
+      overflow: hidden;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+      display: block;
+    }
+
+    .product-info {
+      flex: 1;
+    }
+
+    .product-name {
+      font-size: 18px;
+      font-weight: 700;
+
+      margin-bottom: 7px;
+    }
+
+    .product-description {
+      color: #777;
+
+      font-size: 13px;
+      line-height: 1.5;
+
+      margin-bottom: 9px;
+    }
+
+    .product-price {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+
+    /* =========================
+       ORDER FORM
+    ========================= */
+
+    .order-form {
+      padding: 20px;
+    }
+
+    .form-title {
+      font-size: 17px;
+      font-weight: 700;
+
+      margin-bottom: 18px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+
+      margin-bottom: 7px;
+
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 45px;
+
+      border: 1px solid #ddd;
+      border-radius: 8px;
+
+      padding: 0 13px;
+
+      outline: none;
+
+      font-size: 14px;
+
+      background: #fff;
+    }
+
+    .form-input:focus {
+      border-color: #00a957;
+    }
+
+
+    /* =========================
+       ORDER METHODS
+    ========================= */
+
+    .methods {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 10px;
+    }
+
+    .method {
+      position: relative;
+    }
+
+    .method input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .method-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      min-height: 45px;
+
+      padding: 10px;
+
+      border: 1px solid #ddd;
+      border-radius: 8px;
+
+      cursor: pointer;
+
+      font-size: 13px;
+      font-weight: 700;
+
+      transition: .2s;
+    }
+
+    .method-label:hover {
+      border-color: #00a957;
+    }
+
+    .method input:checked + .method-label {
+      border-color: #00a957;
+
+      background: #eafaf2;
+
+      color: #00a957;
+    }
+
+
+    /* =========================
+       ORDER BUTTON
+    ========================= */
+
+    .order-button {
+      width: 100%;
+      height: 48px;
+
+      margin-top: 8px;
+
+      border: none;
+      border-radius: 8px;
+
+      background: #00a957;
+      color: #fff;
+
+      font-size: 15px;
+      font-weight: 700;
+
+      cursor: pointer;
+
+      transition: .2s;
+    }
+
+    .order-button:hover {
+      background: #00964d;
+    }
+
+    .order-button:disabled {
+      background: #9bd6b9;
+      cursor: not-allowed;
+    }
+
+
+    /* =========================
+       RESULT
+    ========================= */
+
+    .result {
+      display: none;
+
+      margin: 0 20px 20px;
+
+      padding: 18px;
+
+      border-radius: 9px;
+
+      background: #eafaf2;
+      border: 1px solid #b9ebd0;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .result-title {
+      color: #008f4c;
+
+      font-size: 16px;
+      font-weight: 700;
+
+      margin-bottom: 12px;
+    }
+
+    .result-item {
+      margin-bottom: 8px;
+
+      font-size: 13px;
+      color: #555;
+    }
+
+    .result-item strong {
+      color: #222;
+    }
+
+
+    /* =========================
+       STATE
+    ========================= */
+
+    .state {
+      background: #fff;
+
+      border: 1px solid #eee;
+      border-radius: 12px;
+
+      padding: 60px 20px;
+
+      text-align: center;
+
+      color: #777;
+    }
+
+    .state-title {
+      color: #333;
+
+      font-size: 18px;
+      font-weight: 700;
+
+      margin-bottom: 8px;
+    }
+
+    .state-text {
+      font-size: 13px;
+    }
+
+
+    /* =========================
+       ERROR
+    ========================= */
+
+    .error {
+      display: none;
+
+      margin-top: 12px;
+
+      color: #dc2626;
+
+      font-size: 13px;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      background: #fff;
+
+      border-top: 1px solid #e5e5e5;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+
+      margin: auto;
+
+      padding: 40px 20px;
+
+      display: grid;
+
+      grid-template-columns:
+        1.5fr 1fr;
+
+      gap: 40px;
+    }
+
+    .footer-brand {
+      font-size: 20px;
+      font-weight: 800;
+
+      color: #00a957;
+
+      margin-bottom: 10px;
+    }
+
+    .footer-description {
+      max-width: 400px;
+
+      color: #777;
+
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .footer-title {
+      font-size: 14px;
+      font-weight: 700;
+
+      margin-bottom: 14px;
+    }
+
+
+    /* =========================
+       SOCIAL
+    ========================= */
+
+    .socials {
+      display: flex;
+      flex-direction: column;
+
+      gap: 9px;
+    }
+
+    .social {
+      display: flex;
+      align-items: center;
+
+      gap: 9px;
+
+      color: #666;
+
+      font-size: 13px;
+    }
+
+    .social:hover {
+      color: #00a957;
+    }
+
+    .social-icon {
+      width: 28px;
+      height: 28px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 7px;
+
+      background: #f3f3f3;
+
+      font-size: 14px;
+    }
+
+
+    /* =========================
+       COPYRIGHT
+    ========================= */
+
+    .copyright {
+      border-top: 1px solid #eee;
+
+      padding: 17px 20px;
+
+      text-align: center;
+
+      color: #888;
+
+      font-size: 12px;
+    }
+
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 600px) {
+
+      .header-inner {
+        height: 60px;
+
+        padding: 0 12px;
+      }
+
+      .store-name {
+        font-size: 18px;
+      }
+
+      main {
+        padding: 20px 10px 35px;
+      }
+
+      .product-summary {
+        padding: 15px;
+      }
+
+      .product-image {
+        width: 85px;
+        height: 85px;
+      }
+
+      .product-name {
+        font-size: 16px;
+      }
+
+      .product-price {
+        font-size: 16px;
+      }
+
+      .order-form {
+        padding: 15px;
+      }
+
+      .methods {
+        grid-template-columns: 1fr;
+      }
+
+      .result {
+        margin: 0 15px 15px;
+      }
+
+      .footer-inner {
+        grid-template-columns: 1fr;
+
+        gap: 25px;
+
+        padding: 30px 15px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+  <body>
+    <header>
+      <div class="header-inner">
+        <div class="store">
+          <img
+            class="store-logo"
+            src="/assets/favicon.jpg"
+            alt="dpwoffc store"
+          >
+
+          <div class="store-name">
+            dpwoffc store
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <a
+        href="/"
+        class="back"
+      >
+        ← Kembali
+      </a>
+
+      <div id="pageContainer">
+        <div class="state">
+
+          <div class="state-title">
+            Memuat...
+          </div>
+
+          <div class="state-text">
+            Mohon tunggu sebentar.
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">
+            dpwoffc store
+          </div>
+
+          <div class="footer-description">
+            dpwoffc store menyediakan berbagai
+            produk dan layanan digital dengan
+            proses cepat, aman, dan mudah.
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">
+            Ikuti Kami
+          </div>
+
+          <div class="socials">
+            <a href="https://tiktok.com/dpwoffc" class="social">
+              <span class="social-icon">
+                ♪
+              </span>
+              TikTok
+            </a>
+
+            <a href="https://instagram.com/dpwoffc" class="social">
+              <span class="social-icon">
+                ◎
+              </span>
+              Instagram
+            </a>
+
+            <a href="https://whatsapp.com/channel/0029VbDXVLsKAwEuADHPn51T" class="social">
+              <span class="social-icon">
+                ☎
+              </span>
+              WhatsApp
+            </a>
+
+            <a href="https://t.me/dpwoffc" class="social">
+              <span class="social-icon">
+                ➤
+              </span>
+              Telegram
+            </a>
+
+            <a href="mailto:admin@dpwoffc.my.id" class="social">
+              <span class="social-icon">
+                ✉
+              </span>
+              Email
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="copyright">
+        © 2026 dpwoffc store. All rights reserved.
+      </div>
+    </footer>
+
+    <script src="/order/script.js"></script>
+
+  </body>
+
+</html>

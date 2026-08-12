@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Detail produk dpwoffc store"
+  >
+
+  <title>Detail Produk - dpwoffc store</title>
+
+  <link
+    rel="icon"
+    type="image/jpeg"
+    href="/assets/favicon.jpg"
+  >
+
+  <style>
+
+    /* =========================================================
+       RESET
+       ========================================================= */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      width: 100%;
+      min-height: 100%;
+    }
+
+    body {
+      width: 100%;
+      min-height: 100vh;
+
+      background: #f5f5f5;
+      color: #111;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      overflow-x: hidden;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    header {
+      width: 100%;
+
+      background: #fff;
+
+      border-bottom: 1px solid #e8e8e8;
+    }
+
+    .header-inner {
+      width: 100%;
+      max-width: 1100px;
+
+      min-height: 70px;
+
+      margin: 0 auto;
+      padding: 0 20px;
+
+      display: flex;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+
+      gap: 10px;
+
+      text-decoration: none;
+      color: #111;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+
+      display: block;
+
+      object-fit: cover;
+
+      border-radius: 9px;
+
+      background: #eee;
+    }
+
+    .store-name {
+      font-size: 18px;
+      font-weight: 700;
+
+      color: #08a84f;
+    }
+
+
+    /* =========================================================
+       MAIN
+       ========================================================= */
+
+    main {
+      width: 100%;
+
+      max-width: 1100px;
+
+      margin: 0 auto;
+
+      padding:
+        28px 20px
+        60px;
+    }
+
+
+    /* =========================================================
+       BACK BUTTON
+       ========================================================= */
+
+    .back {
+      display: inline-flex;
+
+      align-items: center;
+
+      min-height: 38px;
+
+      margin-bottom: 20px;
+
+      padding: 8px 13px;
+
+      border: 1px solid #dedede;
+
+      border-radius: 9px;
+
+      background: #fff;
+
+      color: #333;
+
+      font-size: 14px;
+      font-weight: 600;
+
+      text-decoration: none;
+
+      transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
+    }
+
+    .back:hover {
+      background: #fafafa;
+
+      border-color: #cfcfcf;
+
+      transform: translateX(-2px);
+    }
+
+
+    /* =========================================================
+       PRODUCT CONTAINER
+       ========================================================= */
+
+    #productContainer {
+      width: 100%;
+
+      max-width: 1000px;
+
+      margin: 0 auto;
+    }
+
+
+    /* =========================================================
+       PRODUCT DETAIL CARD
+       ========================================================= */
+
+    .product-detail {
+
+      width: 100%;
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+      gap: 32px;
+
+      padding: 24px;
+
+      background: #fff;
+
+      border: 1px solid #e2e2e2;
+
+      border-radius: 18px;
+
+      box-shadow:
+        0 8px 30px
+        rgba(0, 0, 0, 0.06);
+
+      overflow: hidden;
+    }
+
+
+    /* =========================================================
+       IMAGE AREA
+       ========================================================= */
+
+    .detail-image {
+
+      width: 100%;
+
+      min-width: 0;
+
+      overflow: hidden;
+
+      border-radius: 14px;
+
+      background: #eeeeee;
+
+      aspect-ratio: 1 / 1;
+    }
+
+    .detail-image img {
+
+      display: block;
+
+      width: 100%;
+      height: 100%;
+
+      max-width: 100%;
+
+      object-fit: cover;
+
+      border-radius: 14px;
+    }
+
+
+    /* =========================================================
+       CONTENT AREA
+       ========================================================= */
+
+    .detail-content {
+
+      width: 100%;
+
+      min-width: 0;
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: flex-start;
+
+      padding:
+        5px 4px 5px 0;
+    }
+
+
+    /* =========================================================
+       PRODUCT NAME
+       ========================================================= */
+
+    .detail-name {
+
+      width: 100%;
+
+      margin-bottom: 12px;
+
+      color: #111;
+
+      font-size: 28px;
+
+      line-height: 1.25;
+
+      font-weight: 700;
+
+      overflow-wrap: anywhere;
+    }
+
+
+    /* =========================================================
+       PRICE
+       ========================================================= */
+
+    .detail-price {
+
+      width: 100%;
+
+      margin-bottom: 18px;
+
+      color: #111;
+
+      font-size: 23px;
+
+      line-height: 1.3;
+
+      font-weight: 700;
+    }
+
+
+    /* =========================================================
+       SERVICES
+       ========================================================= */
+
+    .services {
+
+      width: 100%;
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      align-items: center;
+
+      gap: 7px;
+
+      margin-bottom: 25px;
+    }
+
+    .service {
+
+      display: inline-flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      min-height: 25px;
+
+      padding:
+        4px 9px;
+
+      border-radius: 6px;
+
+      background: #e8fff1;
+
+      color: #00a84f;
+
+      font-size: 11px;
+
+      font-weight: 700;
+    }
+
+
+    /* =========================================================
+       DESCRIPTION
+       ========================================================= */
+
+    .description-title {
+
+      width: 100%;
+
+      margin-bottom: 8px;
+
+      color: #111;
+
+      font-size: 14px;
+
+      line-height: 1.4;
+
+      font-weight: 700;
+    }
+
+    .description {
+
+      width: 100%;
+
+      margin-bottom: 25px;
+
+      color: #666;
+
+      font-size: 14px;
+
+      line-height: 1.7;
+
+      white-space: pre-line;
+
+      overflow-wrap: anywhere;
+
+      word-break: break-word;
+    }
+
+
+    /* =========================================================
+       ORDER
+       ========================================================= */
+
+    .order-area {
+
+      width: 100%;
+
+      margin-top: auto;
+
+      padding-top: 12px;
+    }
+
+    .order-button {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      width: 100%;
+
+      min-height: 48px;
+
+      padding:
+        12px 18px;
+
+      border: 0;
+
+      border-radius: 9px;
+
+      background: #08b85a;
+
+      color: #fff;
+
+      font-size: 14px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      transition:
+        background .2s ease,
+        transform .15s ease,
+        box-shadow .2s ease;
+    }
+
+    .order-button:hover {
+
+      background: #079e4e;
+
+      box-shadow:
+        0 5px 15px
+        rgba(8, 184, 90, .2);
+
+      transform: translateY(-1px);
+    }
+
+    .order-button:active {
+
+      transform: translateY(0);
+
+      box-shadow: none;
+    }
+
+
+    /* =========================================================
+       LOADING / ERROR STATE
+       ========================================================= */
+
+    .state {
+
+      width: 100%;
+
+      min-height: 220px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      justify-content: center;
+
+      padding: 35px 20px;
+
+      background: #fff;
+
+      border: 1px solid #e2e2e2;
+
+      border-radius: 18px;
+
+      box-shadow:
+        0 8px 30px
+        rgba(0, 0, 0, .05);
+
+      text-align: center;
+    }
+
+    .state-title {
+
+      margin-bottom: 8px;
+
+      color: #111;
+
+      font-size: 18px;
+
+      font-weight: 700;
+    }
+
+    .state-text {
+
+      max-width: 500px;
+
+      color: #777;
+
+      font-size: 14px;
+
+      line-height: 1.6;
+
+      overflow-wrap: anywhere;
+    }
+
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    footer {
+
+      width: 100%;
+
+      background: #fff;
+
+      border-top:
+        1px solid #e5e5e5;
+    }
+
+    .footer-inner {
+
+      width: 100%;
+
+      max-width: 1100px;
+
+      margin: 0 auto;
+
+      padding:
+        40px 20px;
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+      gap: 50px;
+    }
+
+    .footer-brand {
+
+      margin-bottom: 10px;
+
+      color: #111;
+
+      font-size: 18px;
+
+      font-weight: 700;
+    }
+
+    .footer-description {
+
+      max-width: 430px;
+
+      color: #777;
+
+      font-size: 14px;
+
+      line-height: 1.7;
+    }
+
+    .footer-title {
+
+      margin-bottom: 14px;
+
+      color: #111;
+
+      font-size: 15px;
+
+      font-weight: 700;
+    }
+
+    .socials {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 9px;
+    }
+
+    .social {
+
+      width: fit-content;
+
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 9px;
+
+      color: #666;
+
+      font-size: 14px;
+
+      text-decoration: none;
+
+      transition:
+        color .2s ease;
+    }
+
+    .social:hover {
+
+      color: #111;
+    }
+
+    .social-icon {
+
+      width: 27px;
+      height: 27px;
+
+      display: inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 7px;
+
+      background: #f1f1f1;
+
+      color: #444;
+
+      font-size: 14px;
+    }
+
+    .copyright {
+
+      width: 100%;
+
+      padding:
+        18px 20px;
+
+      border-top:
+        1px solid #eeeeee;
+
+      color: #888;
+
+      font-size: 12px;
+
+      text-align: center;
+    }
+
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @media (max-width: 800px) {
+
+      .header-inner {
+
+        min-height: 62px;
+
+        padding:
+          0 16px;
+      }
+
+      main {
+
+        padding:
+          22px 16px
+          45px;
+      }
+
+      .product-detail {
+
+        grid-template-columns:
+          minmax(0, 1fr);
+
+        gap: 24px;
+
+        padding: 18px;
+      }
+
+      .detail-image {
+
+        aspect-ratio:
+          16 / 10;
+      }
+
+      .detail-content {
+
+        padding: 0;
+      }
+
+      .detail-name {
+
+        font-size: 24px;
+      }
+
+      .detail-price {
+
+        font-size: 21px;
+      }
+
+      .footer-inner {
+
+        grid-template-columns:
+          minmax(0, 1fr);
+
+        gap: 30px;
+
+        padding:
+          32px 16px;
+      }
+    }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @media (max-width: 480px) {
+
+      .header-inner {
+
+        min-height: 58px;
+
+        padding:
+          0 13px;
+      }
+
+      .brand-logo {
+
+        width: 32px;
+        height: 32px;
+
+        border-radius: 8px;
+      }
+
+      .store-name {
+
+        font-size: 16px;
+      }
+
+      main {
+
+        padding:
+          18px 12px
+          35px;
+      }
+
+      .back {
+
+        min-height: 35px;
+
+        margin-bottom: 15px;
+
+        padding:
+          7px 11px;
+
+        font-size: 13px;
+      }
+
+      .product-detail {
+
+        width: 100%;
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 19px;
+
+        padding: 12px;
+
+        border-radius: 14px;
+      }
+
+      .detail-image {
+
+        width: 100%;
+
+        aspect-ratio:
+          1 / 1;
+
+        border-radius: 10px;
+      }
+
+      .detail-image img {
+
+        border-radius: 10px;
+      }
+
+      .detail-content {
+
+        width: 100%;
+
+        padding:
+          3px;
+      }
+
+      .detail-name {
+
+        margin-bottom: 9px;
+
+        font-size: 21px;
+      }
+
+      .detail-price {
+
+        margin-bottom: 15px;
+
+        font-size: 19px;
+      }
+
+      .services {
+
+        margin-bottom: 20px;
+      }
+
+      .description-title {
+
+        font-size: 14px;
+      }
+
+      .description {
+
+        margin-bottom: 20px;
+
+        font-size: 13px;
+
+        line-height: 1.65;
+      }
+
+      .order-area {
+
+        padding-top: 5px;
+      }
+
+      .order-button {
+
+        min-height: 46px;
+
+        font-size: 13px;
+      }
+
+      .state {
+
+        min-height: 180px;
+
+        padding:
+          30px 15px;
+
+        border-radius: 14px;
+      }
+
+      .state-title {
+
+        font-size: 16px;
+      }
+
+      .state-text {
+
+        font-size: 13px;
+      }
+
+      .footer-inner {
+
+        padding:
+          28px 13px;
+      }
+
+      .copyright {
+
+        padding:
+          16px 13px;
+      }
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+
+  <!-- =======================================================
+       HEADER
+       ======================================================== -->
+
+  <header>
+
+    <div class="header-inner">
+
+      <a
+        href="/"
+        class="brand"
+      >
+
+        <img
+          class="brand-logo"
+          src="/assets/favicon.jpg"
+          alt="dpwoffc store"
+        >
+
+        <div class="store-name">
+          dpwoffc store
+        </div>
+
+      </a>
+
+    </div>
+
+  </header>
+
+
+  <!-- =======================================================
+       MAIN
+       ======================================================== -->
+
+  <main>
+
+    <a
+      href="/"
+      class="back"
+    >
+      ← Kembali
+    </a>
+
+    <div id="productContainer">
+
+      <div class="state">
+
+        <div class="state-title">
+          Memuat produk...
+        </div>
+
+        <div class="state-text">
+          Mohon tunggu sebentar.
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- =======================================================
+       FOOTER
+       ======================================================== -->
+
+  <footer>
+
+    <div class="footer-inner">
+
+
+      <!-- BRAND -->
+
+      <div>
+
+        <div class="footer-brand">
+          dpwoffc store
+        </div>
+
+        <div class="footer-description">
+          dpwoffc store menyediakan berbagai
+          produk dan layanan digital dengan
+          proses cepat, aman, dan mudah.
+        </div>
+
+      </div>
+
+
+      <!-- SOCIAL -->
+
+      <div>
+
+        <div class="footer-title">
+          Ikuti Kami
+        </div>
+
+        <div class="socials">
+
+
+          <a
+            href="https://tiktok.com/dpwoffc"
+            class="social"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+
+            <span class="social-icon">
+              ♪
+            </span>
+
+            TikTok
+
+          </a>
+
+
+          <a
+            href="https://instagram.com/dpwoffc"
+            class="social"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+
+            <span class="social-icon">
+              ◎
+            </span>
+
+            Instagram
+
+          </a>
+
+
+          <a
+            href="https://whatsapp.com/channel/0029VbDXVLsKAwEuADHPn51T"
+            class="social"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+
+            <span class="social-icon">
+              ☎
+            </span>
+
+            WhatsApp
+
+          </a>
+
+
+          <a
+            href="https://t.me/dpwoffc"
+            class="social"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+
+            <span class="social-icon">
+              ➤
+            </span>
+
+            Telegram
+
+          </a>
+
+
+          <a
+            href="mailto:admin@dpwoffc.my.id"
+            class="social"
+          >
+
+            <span class="social-icon">
+              ✉
+            </span>
+
+            Email
+
+          </a>
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="copyright">
+      © 2026 dpwoffc store. All rights reserved.
+    </div>
+
+  </footer>
+
+
+  <!-- =======================================================
+       SCRIPT
+       ======================================================== -->
+
+  <script src="/detail/script.js"></script>
+
+</body>
+
+</html>
