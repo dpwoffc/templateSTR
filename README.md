@@ -417,7 +417,6 @@ npm start
 Jika ingin mengambil versi terbaru dari repository dan tidak memiliki perubahan lokal yang perlu dipertahankan, cara paling bersih adalah menghapus repository lama lalu clone ulang:
 
 ```bash
-cd ..
 cd ~
 rm -rf ~/templateSTR
 git clone https://github.com/dpwoffc/templateSTR.git
