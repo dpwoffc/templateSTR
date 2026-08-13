@@ -6,7 +6,7 @@ const routes = require("./route");
 const settings = require("./database/credential");
 
 const app = express();
-const PORT = process.env.PORT || 1000;
+const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,10 +27,6 @@ app.use(
         path.join(__dirname, "database", "assets")
     )
 );
-
-app.get("/test", (req, res) => {
-    res.send("Hydro OK");
-});
 
 app.use("/", routes);
 
@@ -62,10 +58,6 @@ const server = app.listen(PORT, "0.0.0.0", () => {
 ║ ⚡ Status : Online
 ╚══════════════════════════════════════╝
 `);
-});
-
-server.on("error", (err) => {
-    console.error("SERVER ERROR:", err);
 });
 
 process.on("beforeExit", (code) => {
