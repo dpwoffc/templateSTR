@@ -47,13 +47,13 @@ checkExpiredHyperToken();
 // Lalu jalankan setiap 10 detik
 setInterval(checkExpiredHyperToken, 10000);
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.clear();
     console.log(`
 ╔══════════════════════════════════════╗
 ║          HYDRO SERVER ONLINE         ║
 ╠══════════════════════════════════════╣
-║ 🌐 Express : http://localhost:${PORT}
+║ 🌐 Express : http://0.0.0.0:${PORT}
 ║ 🍪 Cookie Parser : Enabled
 ║ ⚡ Status : Online
 ╚══════════════════════════════════════╝
