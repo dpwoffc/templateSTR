@@ -28,6 +28,10 @@ app.use(
     )
 );
 
+app.get("/test", (req, res) => {
+    res.send("Hydro OK");
+});
+
 app.use("/", routes);
 
 app.use((req, res) => {
@@ -47,7 +51,7 @@ checkExpiredHyperToken();
 // Lalu jalankan setiap 10 detik
 setInterval(checkExpiredHyperToken, 10000);
 
-app.listen(PORT, "0.0.0.0", () => {
+const server = app.listen(PORT, "0.0.0.0", () => {
     console.clear();
     console.log(`
 ╔══════════════════════════════════════╗
@@ -58,6 +62,10 @@ app.listen(PORT, "0.0.0.0", () => {
 ║ ⚡ Status : Online
 ╚══════════════════════════════════════╝
 `);
+});
+
+server.on("error", (err) => {
+    console.error("SERVER ERROR:", err);
 });
 
 process.on("beforeExit", (code) => {
