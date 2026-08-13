@@ -418,9 +418,10 @@ Jika ingin mengambil versi terbaru dari repository dan tidak memiliki perubahan 
 
 ```bash
 cd ..
-rm -rf templateSTR
+cd ~
+rm -rf ~/templateSTR
 git clone https://github.com/dpwoffc/templateSTR.git
-cd templateSTR
+cd ~/templateSTR
 npm install
 npm start
 ```
